@@ -23,18 +23,26 @@
                                     <th>更新时间</th>
                                     <th>操作</th>
                                 </tr>
-                                <% for(var i==0;i<userList.length;i++){ %>
+                                
+                                <% for(var i = 0;i < userList.length;i++){ %>
                                     <tr>
                                         <td><%= userList[i].username%></td>
-                                        <td><% userList[i].rank==0 %>?超级管理员:(<% userList[i].rank==0 %>==1?普通会员:管理员)</td>
-                                        <td><%= userList[i].regtime %></td>
-                                        <td><%= userList[i].updatetime %></td>
                                         <td>
-                                                <a href="/admin/editUser/<%= userList[i]._id %>">修改</a>
-                                                <a href="/admin/deleteUser/<%= userList[i]._id%>">删除</a>
+                                            <%if(userList[i].rank ==0){%>超级管理员<%}%>
+                                            <%if(userList[i].rank ==1){%>普通会员<%}%>
+                                            <%if(userList[i].rank ==2){%>管理员<%}%>
+                                        </td>
+                                        <td><%= userList[i].regtime%></td>
+                                        <td><%= userList[i].updatetime%></td>
+                                        <td>
+                                            <%if(userList[i].rank != 0){%>
+                                            <a href="/admin/editUser/<%= userList[i]._id%>">修改</a>
+                                            <a href="/admin/deleteUser/<%= userList[i]._id%>">删除</a>
+                                            <% } %>
                                         </td>
                                     </tr>
-                                <% } %>
+                                    
+                                    <% } %>
                             </tbody>
                         </table>
                     </div>

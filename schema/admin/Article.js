@@ -14,7 +14,10 @@ var articleSchema = new mongoose.Schema({
     createtime:Date,
     content:String,
     support:Number,
-    Tag:[],
+    Tag:{
+        type:Schema.Types.ObjectId,
+        ref:"Tag"
+    },
     updatetime:Date,
     isDelete:{
         type:Number,

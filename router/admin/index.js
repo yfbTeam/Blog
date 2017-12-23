@@ -7,9 +7,8 @@ var util = require("util");
 var ArticleType = require("../../schema/admin/ArticleType.js");
 
 var Article = require("../../schema/admin/Article.js");
-
-var User = require('../../schema/User');
-
+var User = require("../../schema/admin/User.js");
+var Tag = require("../../schema/admin/Tag.js");
 //当我们访问/admin之后，全部都会进入到这个模块来
 
 router.use("/",function(req,res,next){ 
@@ -32,28 +31,29 @@ router.get("/articleList/:status",function(req,res,next){
     var status = req.params.status;
     Article.find({isDelete:status}).populate("type").exec(function(err,art){
         if(err){
-            console.log(err);
             return
         }
-        console.log(art);
         res.render("admin/article/articleList",{art:art});
     });
 });
 
 router.get("/addArticle",function(req,res,next){
     //查询分类
-    ArticleType.find({},function(err,result){
-        res.render("admin/article/addArticle",{type:result});
+    ArticleType.find({isDelete:0},function(err,result){
+        Tag.find({isDelete:0},function(err,doc){
+            res.render("admin/article/addArticle",{type:result,tag:doc});
+        })
+        
     });
 });
 
 router.post("/addArticle",function(req,res,next){
    var fields = req.body;
    if(fields.title != "" && fields.author != "" && fields.type != "" && fields.read != "" && fields.tag != "" && fields.content  != ""){
-    var data = Object.assign({},fields,{createtime:new Date(),support:0,updatetime:new Date()})    
+    var data = Object.assign({},fields,{createtime:new Date(),support:0,updatetime:new Date()})  
+    console.log(data)  
     Article.create(data,function(err,doc){
             if(err){
-                console.log(err);
                 return
             }
             //res.send("插入成功");
@@ -67,7 +67,10 @@ router.get('/editArticle/:id',function(req,res,next){
     
     Article.findOne({_id:req.params.id},function(err,article){
         ArticleType.find({},function(err,typeList){
-           res.render('admin/article/editArticle',{article:article,type:typeList})
+            Tag.find({isDelete:0},function(err,doc){
+                res.render('admin/article/editArticle',{article:article,type:typeList,tag:doc})
+            })
+          
         });
     })
 
@@ -75,12 +78,11 @@ router.get('/editArticle/:id',function(req,res,next){
 })
 router.post('/editArticle/:id',function(req,res,next){
     var data  = Object.assign({},req.body,{updatetime:new Date()});
-    console.log(data)
+
     Article.update({_id:req.params.id},{
         $set:data
     },function(err,doc){
         if(err){
-            console.log(err.message);
             return
         }
         res.redirect('/admin/articleList/0');
@@ -95,7 +97,6 @@ router.get("/deleteArticle/:id",function(req,res,next){
         }
     },function(err,doc){
         if(err){
-            console.log(err);
             return
         }
         res.redirect('/admin/articleList/0');
@@ -104,7 +105,6 @@ router.get("/deleteArticle/:id",function(req,res,next){
 router.get("/typeList/:status",function(req,res,next){
     ArticleType.find({isDelete:req.params.status},function(err,list){
         if(err){
-            console.log(err);
             return
         }
         res.render("admin/type/typeList",{typeList:list});
@@ -118,7 +118,6 @@ router.post("/addType",function(req,res,next){
     //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
     ArticleType.create(req.body,function(err,doc){
         if(err){
-            console.log(err);
             return
         }
         //res.send("插入成功");
@@ -134,7 +133,6 @@ router.post('/editType/:typename',function(req,res,next){
         $set:req.body
     },function(err,doc){
         if(err){
-            console.log(err);
             return
         }
        //res.send(doc)
@@ -149,10 +147,8 @@ router.get("/deleteType/:typename",function(req,res,next){
         }
     },function(err,doc){
         if(err){
-            console.log(err);
             return
         }
-        console.log(doc)
         //res.send("插入成功");
         res.redirect('/admin/typeList/0');
     });
@@ -160,8 +156,12 @@ router.get("/deleteType/:typename",function(req,res,next){
 
 router.get('/userList/:status',function(req,res,next){
     User.find({isDelete:req.params.status},function(err,list){
-        res.render('/admin/user/index',{userList:list})
+        res.render("admin/user/index",{userList:list});
     })
+    
+    /* User.find({isDelete:req.params.status},function(err,result){
+        
+    }); */
 })
 router.get("/addUser",function(req,res,next){
     res.render("admin/user/createModal",{});
@@ -171,7 +171,6 @@ router.post("/addUser",function(req,res,next){
     //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
     User.create(data,function(err,doc){
         if(err){
-            console.log(err);
             return
         }
         //res.send("插入成功");
@@ -189,7 +188,6 @@ router.post('/editUser/:id',function(req,res,next){
         $set:data
     },function(err,doc){
         if(err){
-            console.log(err);
             return
         }
        //res.send(doc)
@@ -204,11 +202,57 @@ router.get("/deleteUser/:id",function(req,res,next){
         }
     },function(err,doc){
         if(err){
-            console.log(err);
             return
         }
         //res.send("插入成功");
         res.redirect('/admin/userList/0');
+    });
+})
+
+router.get('/tagList/:status',function(req,res,next){
+    Tag.find({isDelete:req.params.status},function(err,list){
+        res.render("admin/tag/index",{tagList:list});
+    })
+})
+router.get("/addTag",function(req,res,next){
+    res.render("admin/tag/createModal",{});
+})
+router.post("/addTag",function(req,res,next){
+    //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
+    Tag.create(req.body,function(err,doc){
+        if(err){
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/tagList/0');
+    });
+});
+router.get("/editTag/:id",function(req,res,next){
+    Tag.findOne({_id:req.params.id},function(err,doc){
+        res.render("admin/tag/editModal",{tag:doc});
+    })
+})
+router.post('/editTag/:id',function(req,res,next){
+    Tag.update({_id:req.params.id},{
+        $set:req.body
+    },function(err,doc){
+        if(err){
+            return
+        }
+        res.redirect('/admin/tagList/0');
+    })
+})
+router.get("/deleteTag/:id",function(req,res,next){
+    Tag.update({_id:req.params.id},{
+        $set:{
+            isDelete:1
+        }
+    },function(err,doc){
+        if(err){
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/tagList/0');
     });
 })
 module.exports = router;
