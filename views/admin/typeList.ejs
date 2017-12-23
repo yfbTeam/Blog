@@ -1,0 +1,44 @@
+<%- include('header') -%>
+<%- include('nav') -%>
+<aside class="right-side">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                            分类列表
+                    </header>
+                    <div class="panel-body table-responsive">
+                        <div class="box-tools m-b-15 clearfix">
+                           <a type="button" class="btn btn-primary pull-right" href="/admin/addType">添加分类</a>
+                           <a type="button" class="btn btn-primary pull-right" href="/admin/typeList/1">分类回收站</a>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>分类名称</th>
+                                    <th>操作</th>
+                                </tr>
+                                <% for(var i = 0;i < typeList.length;i++){ %>
+                                <tr>
+                                    <td><%= (i+1) %></td>
+                                    <td><%= typeList[i].typename %></td>
+                                    <td>
+                                        <a href="/admin/editType/<%= typeList[i].typename %>">修改</a>
+                                        <a href="/admin/deleteType/<%= typeList[i].typename%>">删除</a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+</aside>
+<%- include('footer') -%>

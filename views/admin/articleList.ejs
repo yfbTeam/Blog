@@ -1,0 +1,52 @@
+<%- include('header') -%>
+    <%- include('nav') -%>
+        <aside class="right-side">
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel">
+                            <header class="panel-heading">
+                                文章列表
+                            </header>
+                            <div class="panel-body table-responsive">
+                                <div class="box-tools m-b-15 clearfix">
+                                    <a type="button" class="btn btn-primary pull-right" href="/admin/addArticle">添加文章</a>
+                                    <a type="button" class="btn btn-primary pull-right" href="/admin/articleList/1">文章回收站</a>
+                                </div>
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th>标题</th>
+                                            <th>User</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        <% for(var i = 0;i < art.length;i++){ %>
+                                        <tr>
+                                            <td><%= art[i].title%></td>
+                                            <td><%= art[i].author%></td>
+                                            <td><%= art[i].type.typename%></td>
+                                            <td>
+                                                <span class="label label-success">Approved</span>
+                                            </td>
+                                            <td>
+                                                <a href="/admin/editArticle">修改</a>
+                                                <a href="/admin/deleteArticle/<%= art[i]._id%>">删除</a>
+                                            </td>
+                                        </tr>
+                                        
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </aside>
+        <%- include('footer') -%>
