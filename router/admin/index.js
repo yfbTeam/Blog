@@ -3,11 +3,12 @@ var express = require("express");
 var router = express.Router();
 
 var util = require("util");
-var formidable = require("formidable");
 
 var ArticleType = require("../../schema/admin/ArticleType.js");
 
 var Article = require("../../schema/admin/Article.js");
+
+var User = require('../../schema/User');
 
 //当我们访问/admin之后，全部都会进入到这个模块来
 
@@ -35,21 +36,22 @@ router.get("/articleList/:status",function(req,res,next){
             return
         }
         console.log(art);
-        res.render("admin/articleList",{art:art});
+        res.render("admin/article/articleList",{art:art});
     });
 });
 
 router.get("/addArticle",function(req,res,next){
     //查询分类
     ArticleType.find({},function(err,result){
-        res.render("admin/addArticle",{type:result});
+        res.render("admin/article/addArticle",{type:result});
     });
 });
 
 router.post("/addArticle",function(req,res,next){
    var fields = req.body;
    if(fields.title != "" && fields.author != "" && fields.type != "" && fields.read != "" && fields.tag != "" && fields.content  != ""){
-        Article.create(fields,function(err,doc){
+    var data = Object.assign({},fields,{createtime:new Date(),support:0,updatetime:new Date()})    
+    Article.create(data,function(err,doc){
             if(err){
                 console.log(err);
                 return
@@ -61,6 +63,30 @@ router.post("/addArticle",function(req,res,next){
         res.send("填写不及格，请继续填写");
     }
 });
+router.get('/editArticle/:id',function(req,res,next){
+    
+    Article.findOne({_id:req.params.id},function(err,article){
+        ArticleType.find({},function(err,typeList){
+           res.render('admin/article/editArticle',{article:article,type:typeList})
+        });
+    })
+
+    
+})
+router.post('/editArticle/:id',function(req,res,next){
+    var data  = Object.assign({},req.body,{updatetime:new Date()});
+    console.log(data)
+    Article.update({_id:req.params.id},{
+        $set:data
+    },function(err,doc){
+        if(err){
+            console.log(err.message);
+            return
+        }
+        res.redirect('/admin/articleList/0');
+    })
+    
+})
 router.get("/deleteArticle/:id",function(req,res,next){
     
     Article.update({_id:req.params.id},{
@@ -72,7 +98,6 @@ router.get("/deleteArticle/:id",function(req,res,next){
             console.log(err);
             return
         }
-        console.log(doc)
         res.redirect('/admin/articleList/0');
     });
 })
@@ -82,12 +107,12 @@ router.get("/typeList/:status",function(req,res,next){
             console.log(err);
             return
         }
-        res.render("admin/typeList",{typeList:list});
+        res.render("admin/type/typeList",{typeList:list});
     })
     
 });
 router.get("/addType",function(req,res,next){
-    res.render("admin/addType",{});
+    res.render("admin/type/addType",{});
 })
 router.post("/addType",function(req,res,next){
     //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
@@ -102,14 +127,17 @@ router.post("/addType",function(req,res,next){
 });
 router.get("/editType/:typename",function(req,res,next){
 
-    res.render("admin/editType",{typename:req.params.typename});
+    res.render("admin/type/editType",{typename:req.params.typename});
 })
-router.post('/editType',function(req,res,next){
-    ArticleType.update(req.body,function(err,doc){
+router.post('/editType/:typename',function(req,res,next){
+    ArticleType.update({typename:req.params.typename},{
+        $set:req.body
+    },function(err,doc){
         if(err){
             console.log(err);
             return
         }
+       //res.send(doc)
         //res.send("插入成功");
         res.redirect('/admin/typeList/0');
     });
@@ -127,6 +155,60 @@ router.get("/deleteType/:typename",function(req,res,next){
         console.log(doc)
         //res.send("插入成功");
         res.redirect('/admin/typeList/0');
+    });
+})
+
+router.get('/userList/:status',function(req,res,next){
+    User.find({isDelete:req.params.status},function(err,list){
+        res.render('/admin/user/index',{userList:list})
+    })
+})
+router.get("/addUser",function(req,res,next){
+    res.render("admin/user/createModal",{});
+})
+router.post("/addUser",function(req,res,next){
+    var data = Object.assign({},req.body,{regtime:new Date(),updatetime:new Date()})
+    //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
+    User.create(data,function(err,doc){
+        if(err){
+            console.log(err);
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/userList/0');
+    });
+});
+router.get("/editUser/:id",function(req,res,next){
+    User.findOne({_id:req.params.id},function(err,doc){
+        res.render("admin/user/editModal",{user:doc});
+    })
+})
+router.post('/editUser/:id',function(req,res,next){
+    var data = Object.assign({},req.body,{updatetime:new Date()});
+    User.update({_id:req.params.id},{
+        $set:data
+    },function(err,doc){
+        if(err){
+            console.log(err);
+            return
+        }
+       //res.send(doc)
+        //res.send("插入成功");
+        res.redirect('/admin/userList/0');
+    });
+})
+router.get("/deleteUser/:id",function(req,res,next){
+    User.update({_id:req.params.id},{
+        $set:{
+            isDelete:1
+        }
+    },function(err,doc){
+        if(err){
+            console.log(err);
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/userList/0');
     });
 })
 module.exports = router;

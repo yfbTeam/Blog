@@ -1,5 +1,5 @@
-<%- include('header') -%>
-    <%- include('nav') -%>
+<%- include('../common/header') -%>
+    <%- include('../common/nav') -%>
         <aside class="right-side">
             <!-- Main content -->
             <section class="content">
@@ -32,7 +32,7 @@
                                                 <span class="label label-success">Approved</span>
                                             </td>
                                             <td>
-                                                <a href="/admin/editArticle">修改</a>
+                                                <a href="/admin/editArticle/<%= art[i]._id%>">修改</a>
                                                 <a href="/admin/deleteArticle/<%= art[i]._id%>">删除</a>
                                             </td>
                                         </tr>
@@ -49,4 +49,4 @@
             </section>
             <!-- /.content -->
         </aside>
-        <%- include('footer') -%>
+        <%- include('../common/footer') -%>

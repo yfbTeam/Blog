@@ -1,0 +1,48 @@
+<%- include('../common/header') -%>
+<%- include('../common/nav') -%>
+<aside class="right-side">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                        用户列表
+                    </header>
+                    <div class="panel-body table-responsive">
+                        <div class="box-tools m-b-15 clearfix">
+                           <a type="button" class="btn btn-primary pull-right" href="/admin/addUser">添加用户</a>
+                           <a type="button" class="btn btn-primary pull-right" href="/admin/userList/1">用户回收站</a>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>用户名</th>
+                                    <th>会员级别</th>
+                                    <th>注册时间</th>
+                                    <th>更新时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                <% for(var i==0;i<userList.length;i++){ %>
+                                    <tr>
+                                        <td><%= userList[i].username%></td>
+                                        <td><% userList[i].rank==0 %>?超级管理员:(<% userList[i].rank==0 %>==1?普通会员:管理员)</td>
+                                        <td><%= userList[i].regtime %></td>
+                                        <td><%= userList[i].updatetime %></td>
+                                        <td>
+                                                <a href="/admin/editUser/<%= userList[i]._id %>">修改</a>
+                                                <a href="/admin/deleteUser/<%= userList[i]._id%>">删除</a>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+</aside>
+<%- include('../common/footer') -%>

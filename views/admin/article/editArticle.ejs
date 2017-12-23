@@ -1,5 +1,5 @@
-<%- include('header') -%>
-    <%- include('nav') -%>
+<%- include('../common/header') -%>
+    <%- include('../common/nav') -%>
         <aside class="right-side">
             <!-- Main content -->
             <section class="content">
@@ -7,14 +7,14 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading">
-                                添加文章
+                                修改文章
                             </header>
                             <div class="panel-body">
                                 <form class="form-horizontal tasi-form" method="post">
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">标题</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="title">
+                                            <input type="text" class="form-control" name="title" value="<%= article.title%>">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -23,13 +23,13 @@
 
                                             <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" class="attibute" value="option1">[H:热点信息]
+                                                        <input type="checkbox" class="attribute" value="1" name="attribute" <%if(article.attribute[0]==1){%> checked <%}%>>[H:热点信息]
                                                     </label>
                                                     <label>
-                                                        <input type="checkbox" class="attibute" value="option1">[P：轮播图]
+                                                        <input type="checkbox" class="attribute" value="2" name="attribute" <%if(article.attribute[1]==2){%> checked <%}%>>[P：轮播图]
                                                     </label>
                                                     <label>
-                                                        <input type="checkbox" class="attibute" value="option1">[R:推荐]
+                                                        <input type="checkbox" class="attribute" value="3"  name="attribute" <%if(article.attribute[2]==3){%> checked <%}%>>[R:推荐]
                                                     </label>
                                             </div>
                                         </div>
@@ -37,7 +37,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">作者</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="author" class="form-control round-input">
+                                            <input type="text" name="author" class="form-control round-input" value="<%= article.author%>">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -47,7 +47,7 @@
                                                     <!-- 自定义一个格式：-1表示用户没有选择文章类型-->
                                                     <option value="-1">请选择文章类型</option>
                                                     <% for(var i = 0;i < type.length;i++){ %>
-                                                    <option value="<%= type[i].id %>"><%= type[i].typename %></option>
+                                                    <option value="<%= type[i].id %>" <%if(article.type==type[i].id){%> selected <%}%>><%= type[i].typename %></option>
                                                     <% } %>
                                                 </select>
                                         </div>
@@ -56,19 +56,19 @@
                                         <!--访客浏览人数-->
                                         <label class="col-sm-2 col-sm-2 control-label">阅读人数</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" name="read" type="text" placeholder="Disabled input here...">
+                                            <input class="form-control" name="read" type="text" placeholder="Disabled input here..." value="<%= article.read%>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">Tag标签</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="tag" placeholder="placeholder">
+                                            <input type="text" class="form-control" name="Tag" placeholder="placeholder" value="<%= article.Tag%>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">文章内容</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" name="content" rows="10"></textarea>
+                                            <textarea class="form-control" name="content" rows="10"><%= article.content%></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -90,4 +90,4 @@
             </section>
             <!-- /.content -->
         </aside>
-        <%- include('footer') -%>
+        <%- include('../common/footer') -%>
