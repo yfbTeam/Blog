@@ -26,8 +26,8 @@
                                     <td><%= (i+1) %></td>
                                     <td><%= typeList[i].typename %></td>
                                     <td>
-                                        <a href="/admin/editType/<%= typeList[i].typename %>">修改</a>
-                                        <a href="/admin/deleteType/<%= typeList[i].typename%>">删除</a>
+                                        <a href="/admin/editType/<%= typeList[i]._id %>">修改</a>
+                                        <a href="/admin/deleteType/<%= typeList[i]._id%>">删除</a>
                                     </td>
                                 </tr>
                                 <% } %>

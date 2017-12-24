@@ -136,12 +136,14 @@ router.post("/addType",function(req,res,next){
         res.redirect('/admin/typeList/0');
     });
 });
-router.get("/editType/:typename",function(req,res,next){
-
-    res.render("admin/type/editType",{typename:req.params.typename});
+router.get("/editType/:id",function(req,res,next){
+    ArticleType.findOne({_id:req.params.id},function(err,type){
+        res.render("admin/type/editType",{type:type});
+    })
+    
 })
-router.post('/editType/:typename',function(req,res,next){
-    ArticleType.update({typename:req.params.typename},{
+router.post('/editType/:id',function(req,res,next){
+    ArticleType.update({_id:req.params.id},{
         $set:req.body
     },function(err,doc){
         if(err){
@@ -152,8 +154,8 @@ router.post('/editType/:typename',function(req,res,next){
         res.redirect('/admin/typeList/0');
     });
 })
-router.get("/deleteType/:typename",function(req,res,next){
-    ArticleType.update({typename:req.params.typename},{
+router.get("/deleteType/:id",function(req,res,next){
+    ArticleType.update({_id:req.params.id},{
         $set:{
             isDelete:1
         }
