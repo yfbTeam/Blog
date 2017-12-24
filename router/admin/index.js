@@ -9,6 +9,7 @@ var ArticleType = require("../../schema/admin/ArticleType.js");
 var Article = require("../../schema/admin/Article.js");
 var User = require("../../schema/admin/User.js");
 var Tag = require("../../schema/admin/Tag.js");
+var Attribute = require('../../schema/admin/Attribute.js')
 //当我们访问/admin之后，全部都会进入到这个模块来
 
 router.use("/",function(req,res,next){ 
@@ -49,7 +50,7 @@ router.get("/addArticle",function(req,res,next){
 
 router.post("/addArticle",function(req,res,next){
    var fields = req.body;
-   if(fields.title != "" && fields.author != "" && fields.type != "" && fields.read != "" && fields.tag != "" && fields.content  != ""){
+   if(fields.title != "" && fields.author != "" && fields.type != "" && fields.read != "" && fields.Tag != "" && fields.content  != ""){
     var data = Object.assign({},fields,{createtime:new Date(),support:0,updatetime:new Date()})  
     console.log(data)  
     Article.create(data,function(err,doc){
@@ -255,6 +256,54 @@ router.get("/deleteTag/:id",function(req,res,next){
         res.redirect('/admin/tagList/0');
     });
 })
+
+router.get('/attributeList/:status',function(req,res,next){
+    Attribute.find({isDelete:req.params.status},function(err,list){
+        res.render("admin/attribute/index",{attributeList:list});
+    })
+})
+router.get("/addAttribute",function(req,res,next){
+    res.render("admin/attribute/createModal",{});
+})
+router.post("/addAttribute",function(req,res,next){
+    //简单的操作是可以直接在这个路由文件中写，如果有稍微复杂的处理逻辑，那么还是应该放在业务层去处理
+    Attribute.create(req.body,function(err,doc){
+        if(err){
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/attributeList/0');
+    });
+});
+router.get("/editAttribute/:id",function(req,res,next){
+    Attribute.findOne({_id:req.params.id},function(err,doc){
+        res.render("admin/attribute/editModal",{attribute:doc});
+    })
+})
+router.post('/editAttribute/:id',function(req,res,next){
+    Attribute.update({_id:req.params.id},{
+        $set:req.body
+    },function(err,doc){
+        if(err){
+            return
+        }
+        res.redirect('/admin/attributeList/0');
+    })
+})
+router.get("/deleteAttribute/:id",function(req,res,next){
+    Attribute.update({_id:req.params.id},{
+        $set:{
+            isDelete:1
+        }
+    },function(err,doc){
+        if(err){
+            return
+        }
+        //res.send("插入成功");
+        res.redirect('/admin/attributeList/0');
+    });
+})
+
 module.exports = router;
 
 
