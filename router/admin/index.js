@@ -34,10 +34,8 @@ router.get("/articleList/:status",function(req,res,next){
     
     Article.find({isDelete:status}).populate("type").populate('Tag').populate('attribute').exec(function(err,art){
         if(err){
-            console.log(err)
             return
         }
-        console.log(art)
        res.render("admin/article/articleList",{art:art});
     });
 });
@@ -64,7 +62,6 @@ router.post("/addArticle",function(req,res,next){
     
     Article.create(data,function(err,doc){
             if(err){
-                console.log(err)  
                 return
             }
             //res.send("插入成功");
@@ -90,11 +87,12 @@ router.get('/editArticle/:id',function(req,res,next){
 })
 router.post('/editArticle/:id',function(req,res,next){
     var data  = Object.assign({},req.body,{updatetime:new Date()});
-
+    console.log(util.inspect(data))
     Article.update({_id:req.params.id},{
         $set:data
     },function(err,doc){
         if(err){
+            console.log(err)
             return
         }
         res.redirect('/admin/articleList/0');
