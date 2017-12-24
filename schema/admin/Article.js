@@ -4,20 +4,23 @@ var Schema = mongoose.Schema;
 
 var articleSchema = new mongoose.Schema({
     title:String,
-    attribute:[],
+    attribute:[{
+        type:Schema.Types.ObjectId,
+        ref:"Attribute"
+    }],
     author:String,
-    type:{
+    type:[{
         type:Schema.Types.ObjectId,
         ref:"ArcType"
-    },//如果是多个就为数组，如果是单个就为String
+    }],//如果是多个就为数组，如果是单个就为String
     read:Number,
     createtime:Date,
     content:String,
     support:Number,
-    Tag:{
+    Tag:[{
         type:Schema.Types.ObjectId,
         ref:"Tag"
-    },
+    }],
     updatetime:Date,
     isDelete:{
         type:Number,

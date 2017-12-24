@@ -18,19 +18,39 @@
                                     <tbody>
                                         <tr>
                                             <th>标题</th>
-                                            <th>User</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
+                                            <th>作者</th>
+                                            <th>推荐属性</th>
+                                            <th>分类</th>
+                                            <th>阅读数</th>
+                                            <th>Tag标签</th>
+                                            <th>支持数</th>
+                                            <th>创建时间</th>
+                                            <th>更新时间</th>
                                             <th>操作</th>
                                         </tr>
                                         <% for(var i = 0;i < art.length;i++){ %>
                                         <tr>
                                             <td><%= art[i].title%></td>
                                             <td><%= art[i].author%></td>
-                                            <td><%= art[i].type.typename%></td>
                                             <td>
-                                                <span class="label label-success">Approved</span>
+                                                <% for(var a = 0;a < art[i].attribute.length;a++){ %>
+                                                    <span><%= art[i].attribute[a].attributename %></span>
+                                                <% } %>
                                             </td>
+                                            <td>
+                                                <% for(var a = 0;a < art[i].type.length;a++){ %>
+                                                    <span><%= art[i].type[a].typename %></span>
+                                                <% } %>
+                                            </td>
+                                            <td><%= art[i].read%></td>
+                                            <td>
+                                                <% for(var a = 0;a < art[i].Tag.length;a++){ %>
+                                                    <span><%= art[i].Tag[a].tagname %></span>
+                                                <% } %>
+                                            </td>
+                                            <td><%= art[i].support%></td>
+                                            <td><%= art[i].createtime%></td>
+                                            <td><%= art[i].updatetime%></td>
                                             <td>
                                                 <a href="/admin/editArticle/<%= art[i]._id%>">修改</a>
                                                 <a href="/admin/deleteArticle/<%= art[i]._id%>">删除</a>

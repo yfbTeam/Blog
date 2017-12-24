@@ -29,32 +29,42 @@ router.get("/articleList/:status",function(req,res,next){
     /*
         列表：标题、推荐属性、作者、分类名称（不是ID）、内容、点赞、文章Tag、修改时间
     */
+   
     var status = req.params.status;
-    Article.find({isDelete:status}).populate("type").exec(function(err,art){
+    
+    Article.find({isDelete:status}).populate("type").populate('Tag').populate('attribute').exec(function(err,art){
         if(err){
+            console.log(err)
             return
         }
-        res.render("admin/article/articleList",{art:art});
+        console.log(art)
+       res.render("admin/article/articleList",{art:art});
     });
 });
 
 router.get("/addArticle",function(req,res,next){
+   
     //查询分类
-    ArticleType.find({isDelete:0},function(err,result){
-        Tag.find({isDelete:0},function(err,doc){
-            res.render("admin/article/addArticle",{type:result,tag:doc});
+    ArticleType.find({isDelete:0},function(err,type){
+        Tag.find({isDelete:0},function(err,tag){
+            Attribute.find({isDelete:0},function(err,attribute){
+                res.render("admin/article/addArticle",{type:type,tag:tag,attribute:attribute});
+            })
         })
-        
     });
+    
+    
+    
 });
 
 router.post("/addArticle",function(req,res,next){
    var fields = req.body;
    if(fields.title != "" && fields.author != "" && fields.type != "" && fields.read != "" && fields.Tag != "" && fields.content  != ""){
     var data = Object.assign({},fields,{createtime:new Date(),support:0,updatetime:new Date()})  
-    console.log(data)  
+    
     Article.create(data,function(err,doc){
             if(err){
+                console.log(err)  
                 return
             }
             //res.send("插入成功");
@@ -67,11 +77,12 @@ router.post("/addArticle",function(req,res,next){
 router.get('/editArticle/:id',function(req,res,next){
     
     Article.findOne({_id:req.params.id},function(err,article){
-        ArticleType.find({},function(err,typeList){
-            Tag.find({isDelete:0},function(err,doc){
-                res.render('admin/article/editArticle',{article:article,type:typeList,tag:doc})
+        ArticleType.find({isDelete:0},function(err,type){
+            Tag.find({isDelete:0},function(err,tag){
+                Attribute.find({isDelete:0},function(err,attribute){
+                    res.render("admin/article/editArticle",{article:article,type:type,tag:tag,attribute:attribute});
+                })
             })
-          
         });
     })
 

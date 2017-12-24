@@ -1,5 +1,6 @@
 <%- include('../common/header') -%>
     <%- include('../common/nav') -%>
+    
         <aside class="right-side">
             <!-- Main content -->
             <section class="content">
@@ -20,13 +21,15 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">推荐属性</label>
                                         <div class="col-sm-10">
-                                            <select name="attribute" class="form-control input-sm">
-                                                <!-- 自定义一个格式：-1表示用户没有选择文章类型-->
-                                                <option value="-1">请选择推荐属性</option>
-                                                <% for(var i = 0;i < type.length;i++){ %>
-                                                <option value="<%= type[i].id %>"><%= type[i].typename %></option>
+                                            <div class="checkbox">
+                                                <% for(var i = 0;i < attribute.length;i++){ %>
+                                                <label>
+                                                    <input type="checkbox" class="attribute" value="<%= attribute[i]._id %>" name="attribute" >
+                                                    <%= attribute[i].attributename %>
+                                                </label>
                                                 <% } %>
-                                            </select>
+                                                    
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -38,13 +41,14 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">分类</label>
                                         <div class="col-sm-10">
-                                                <select name="type" class="form-control input-sm">
-                                                    <!-- 自定义一个格式：-1表示用户没有选择文章类型-->
-                                                    <option value="-1">请选择文章类型</option>
-                                                    <% for(var i = 0;i < type.length;i++){ %>
-                                                    <option value="<%= type[i].id %>"><%= type[i].typename %></option>
-                                                    <% } %>
-                                                </select>
+                                            <div class="checkbox">
+                                                <% for(var i = 0;i < type.length;i++){ %>
+                                                    <label>
+                                                        <input type="checkbox" class="type" value="<%= type[i]._id %>" name="type" >
+                                                        <%= type[i].typename %>
+                                                    </label>
+                                                <% } %>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -57,7 +61,14 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 col-sm-2 control-label">Tag标签</label>
                                         <div class="col-sm-10">
-                                            
+                                            <div class="checkbox">
+                                                <% for(var i = 0;i < tag.length;i++){ %>
+                                                    <label>
+                                                        <input type="checkbox" class="type" value="<%= tag[i]._id %>" name="Tag" >
+                                                        <%= tag[i].tagname %>
+                                                    </label>
+                                                <% } %>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
