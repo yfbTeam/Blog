@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var ArticleType = require('../../schema/admin/ArticleType');
 var typeModal = require('../../modles/admin/type')
 router.get("/typeList/:status",function(req,res,next){
     typeModal.getList({isDelete:req.params.status},function(err,list){

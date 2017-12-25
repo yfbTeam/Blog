@@ -1,6 +1,4 @@
 
-var express = require('express');
-var router = express.Router();
 var Article = require("../../schema/admin/Article");
 var tagModal = require('../../modles/admin/tag')
 module.exports= {

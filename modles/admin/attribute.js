@@ -1,5 +1,4 @@
-var express = require('express');
-var router = express.Router();
+
 var Attribute = require('../../schema/admin/Attribute')
 module.exports = {
     getList:function(params,callback){

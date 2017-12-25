@@ -1,5 +1,4 @@
-var express = require('express');
-var router = express.Router();
+
 var ArticleType = require('../../schema/admin/ArticleType');
 module.exports = {
     getList:function(params,callback){
