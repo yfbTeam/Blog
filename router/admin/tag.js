@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Tag = require("../../schema/admin/Tag.js");
+var Tag = require("../../schema/admin/Tag");
 router.get('/tagList/:status',function(req,res,next){
     Tag.find({isDelete:req.params.status},function(err,list){
         res.render("admin/tag/index",{tagList:list});

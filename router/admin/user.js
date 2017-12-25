@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var User = require("../../schema/admin/User.js");
+var User = require("../../schema/User");
 router.get('/userList/:status',function(req,res,next){
     User.find({isDelete:req.params.status},function(err,list){
         res.render("admin/user/index",{userList:list});

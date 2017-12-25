@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Article = require("../../schema/admin/Article.js");
+var Article = require("../../schema/admin/Article");
 router.get("/articleList/:status",function(req,res,next){
     /*
         列表：标题、推荐属性、作者、分类名称（不是ID）、内容、点赞、文章Tag、修改时间

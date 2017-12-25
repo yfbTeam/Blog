@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Attribute = require('../../schema/admin/Attribute.js')
+var Attribute = require('../../schema/admin/Attribute')
 router.get('/attributeList/:status',function(req,res,next){
     Attribute.find({isDelete:req.params.status},function(err,list){
         res.render("admin/attribute/index",{attributeList:list});
