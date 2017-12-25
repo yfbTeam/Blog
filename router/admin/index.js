@@ -24,28 +24,3 @@ router.use(attributeRouter)
 router.use(articleRouter)
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
