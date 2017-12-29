@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var model = require('../../modles/admin/model');
-var user = require('../../schema/User');
+var user = require('../../schema/user/User');
 router.get('/userList/:status',function(req,res,next){
     model.getList(user,{isDelete:req.params.status},function(err,list){
         res.render("admin/user/index",{userList:list});
